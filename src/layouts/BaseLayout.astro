@@ -1,0 +1,125 @@
+---
+// src/layouts/BaseLayout.astro
+const { title = "HANYA | Wabi-Sabi x Modern Pop Art", activeLayer = "" } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+<script src="https://cdn.tailwindcss.com" is:inline></script> 
+  <script is:inline>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'wabi-bg': '#fdfdfb',
+            'wabi-text': '#1a1a1a',
+            'pop-neon': '#ff00ff',
+            'pop-blue': '#00f0ff',
+            'wabi-border': '#e5e5e1',
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style is:global>
+    :root {
+      --wabi-bg: #fdfdfb;
+      --wabi-text: #1a1a1a;
+      --pop-neon: #ff00ff;
+      --pop-blue: #00f0ff;
+      --wabi-border: #e5e5e1;
+    }
+    body { font-family: 'Space Grotesk', sans-serif; background-color: var(--wabi-bg); color: var(--wabi-text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    h1,h2,h3,h4,.serif { font-family: 'Cormorant Garamond', serif; }
+    .pop-accent { color: var(--pop-neon); }
+    .bg-pop { background-color: var(--pop-neon); }
+    .wabi-border { border: 1px solid var(--wabi-border); }
+    .grain-overlay { position: fixed; top:0;left:0;width:100%;height:100%; pointer-events:none; z-index:100; opacity:0.04; background-image:url('https://grainy-gradients.vercel.app/noise.svg'); }
+    .sticky-nav { backdrop-filter: blur(12px); background-color: rgba(253,253,251,0.85); }
+    .product-reveal { opacity:0; transform:translateY(40px); transition: all 1s cubic-bezier(0.16,1,0.3,1); }
+    .product-reveal.visible { opacity:1; transform:translateY(0); }
+    .hover-zoom img { transition: transform 1.2s cubic-bezier(0.16,1,0.3,1); }
+    .hover-zoom:hover img { transform: scale(1.05); }
+    .neon-glow { box-shadow: 0 0 30px rgba(255,0,255,0.2); }
+    .float-anim { animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    .vinyl-spin { animation: spin 20s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .audio-wave { height:2px; background:var(--pop-neon); transform-origin:left; animation: wave 2s ease-in-out infinite; }
+    @keyframes wave { 0%,100% { transform: scaleX(0.1); } 50% { transform: scaleX(1); } }
+    .vertical-text { writing-mode: vertical-rl; text-orientation: mixed; }
+    .halftone-bg { background-image: radial-gradient(var(--pop-neon) 1px, transparent 0); background-size: 10px 10px; opacity: 0.05; }
+    .strikethrough-pop { position: relative; display: inline-block; }
+    .strikethrough-pop::after { content:''; position:absolute; left:0;top:50%; width:100%;height:2px; background:var(--pop-neon); transform:rotate(-2deg); }
+  </style>
+</head>
+<body class="antialiased">
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 sticky-nav border-b wabi-border px-6 md:px-12 py-5 flex justify-between items-center" style="border-bottom:1px solid var(--wabi-border)">
+    <a href="/" class="text-2xl font-bold tracking-[0.2em]">HANYA<span class="pop-accent">.</span></a>
+    <div class="hidden md:flex space-x-16 text-[10px] uppercase tracking-[0.3em] font-medium">
+      <a href="/visual" class={`transition-all ${activeLayer === 'visual' ? 'pop-accent' : 'hover:opacity-60'}`}>01. Visual</a>
+      <a href="/tactical" class={`transition-all ${activeLayer === 'tactical' ? 'pop-accent' : 'hover:opacity-60'}`}>02. Tactical</a>
+      <a href="/auditory" class={`transition-all ${activeLayer === 'auditory' ? 'pop-accent' : 'hover:opacity-60'}`}>03. Auditory</a>
+    </div>
+    <a href="/cart" class="text-[10px] uppercase tracking-[0.3em] font-medium border-b border-black pb-1 flex items-center gap-1" id="nav-bag">
+      Bag (<span id="cart-count">0</span>)
+    </a>
+  </nav>
+
+  <main>
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-20 bg-white border-t wabi-border">
+    <div class="container mx-auto px-6 md:px-12 text-center">
+      <h2 class="text-4xl font-bold tracking-[0.3em] mb-8">HANYA<span class="pop-accent">.</span></h2>
+      <div class="flex justify-center space-x-12 text-[10px] uppercase tracking-[0.3em] font-medium text-gray-400 mb-12">
+        <a href="/" class="hover:text-black">Home</a>
+        <a href="/visual" class="hover:text-black">Visual</a>
+        <a href="/tactical" class="hover:text-black">Tactical</a>
+        <a href="/auditory" class="hover:text-black">Auditory</a>
+      </div>
+      <p class="text-[8px] uppercase tracking-[0.4em] text-gray-300">&copy; 2026 HANYA STUDIO. CRAFTED FOR THE SOUL.</p>
+    </div>
+  </footer>
+
+  <script is:inline>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.product-reveal').forEach(el => observer.observe(el));
+
+    // Cart count from localStorage
+    function updateCartCount() {
+      try {
+        const cart = JSON.parse(localStorage.getItem('hanya-cart') || '[]');
+        const total = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+        const el = document.getElementById('cart-count');
+        if (el) el.textContent = total;
+      } catch(e) {}
+    }
+    updateCartCount();
+    window.addEventListener('storage', updateCartCount);
+    window.addEventListener('cart-updated', updateCartCount);
+  </script>
+</body>
+</html>
