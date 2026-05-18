@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  output: 'static',
+  // Replace with your GitHub username and repository name
+  site: 'https://dionwicaksono.github.io',
+  base: '/hanya',
 });
